@@ -9,7 +9,7 @@
 - **선택 콘텐츠 · 방탈출**: 1화 「지하 4층 정전」의 퍼즐 5개를 진행합니다.
 - **안전 게이트**: P단, 속도 0, 네 문 닫힘, 신호 정상일 때만 시작합니다. 조건이 깨지면 멈추고 저장하며, 자동으로 재개하지 않습니다.
 
-처음 실행할 때 음성+자막 또는 자막만, 보통 또는 큰 글자를 고릅니다. 홈의 「안내 방식」에서도 이 두 항목을 바꿀 수 있습니다. 자세히/짧게, 화면으로 대신하기, 조명 연출은 현재 설정 화면에서 선택할 수 없습니다.
+처음 실행할 때 음성+자막 또는 자막만, 보통 또는 큰 글자를 고릅니다. 홈의 「안내 방식」에서도 이 두 항목을 바꿀 수 있습니다. 자세히/짧게와 조명 연출을 고르는 설정은 없습니다. 화면으로 대신하기는 지원하는 퍼즐에서 선택할 수 있습니다.
 
 ## 개발 및 검증 환경
 
@@ -17,8 +17,7 @@
 - 에뮬레이터 화면 규격: 2560 × 1440 px
 - Kotlin 2.0.0, Jetpack Compose, Gradle wrapper 8.10.2, AGP 8.8.2, JDK 17
 - Pleos Vehicle SDK 2.3.2, TextToSpeech SDK 3.3.1
-- 단위 테스트: 2026-11-15 기준 121개 통과. 같은 날 서명된 Release APK를 빌드하고 서명을 확인했으며, Pleos Connect Emulator 2.1.0에 설치해 첫 화면 실행을 확인했습니다. 전체 화면 흐름과 실차 동작은 확인되지 않았습니다.
-- 실차 동작은 확인되지 않았습니다.
+- 단위 테스트: 2026-11-15 기준 121개 통과. 같은 날 서명된 Release APK를 빌드하고 서명을 확인했습니다. Pleos Connect Emulator 2.1.0에서 첫 설정·홈, 열선 연습·다음 날 복습, 1화의 안내판·금고·핸들·공조·불빛·완료 흐름, 속도 신호에 따른 멈춤과 수동 재개를 확인했습니다. 실차 동작은 확인하지 않았습니다.
 - 공개 저장소: https://github.com/KOTEAKS/chageun
 - 제출용 서명 APK: `apk/김택수_차근차근_release.apk` (저장소 내 경로)
 
@@ -39,6 +38,8 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 adb shell am start -n com.letsgo.chageun/.MainActivity
 ```
 
+첫 실행 시 Android Automotive가 표시하는 차량 속도 권한을 허용해야 합니다. 권한 대화상자에는 「위치 정보」로 표시될 수 있지만, 앱은 주행 속도 신호를 읽으며 사용자 위치를 수집하거나 저장하지 않습니다. 시연은 안전하게 주차하고 P단·속도 0·네 문 닫힘 상태에서 진행하세요.
+
 ## 제출용 Release APK
 
 제출용 APK는 서명된 `release` 빌드입니다. 빌드 출력은 `app/build/outputs/apk/release/app-release.apk`이며, 제출용 파일은 `apk/김택수_차근차근_release.apk`에 있습니다.
@@ -54,14 +55,27 @@ keyAlias=chageun-release
 keyPassword=<키 비밀번호>
 ```
 
-차량 신호를 사용하는 검증에는 Pleos Connect 에뮬레이터와 Virtual Console이 필요합니다. 에뮬레이터를 콜드 부팅한 뒤 `adb forward tcp:8088 tcp:8088`을 설정하고 `tools/vc_scenario.py`를 사용합니다.
+차량 신호를 사용하는 시연에는 Pleos Connect 에뮬레이터와 Virtual Console이 필요합니다. 에뮬레이터를 콜드 부팅한 뒤 포트를 연결하고 로컬 Virtual Console 페이지를 브라우저에서 열어 세션을 활성화합니다. 페이지를 열지 않으면 에뮬레이터와 브리지가 연결되지 않을 수 있습니다.
 
 ```bash
+adb forward tcp:8088 tcp:8088
+open -a "Google Chrome" http://127.0.0.1:8088/
+curl http://127.0.0.1:8088/vehicle/driving-mode
 python3 -I tools/vc_scenario.py park
 python3 -I tools/vc_scenario.py defrost on
 python3 -I tools/vc_scenario.py cruise ready
 python3 -I tools/vc_scenario.py demo
 ```
+
+상태 응답에서 `emulator_active`와 `bridge_ready`가 모두 `true`인지 확인한 뒤 시연합니다. `demo`는 명령마다 Enter를 눌러 진행하는 대화형 시나리오입니다. 앱이 시작되지 않으면 에뮬레이터 홈에서 차근차근을 다시 여세요.
+
+다음 날 복습 배너는 Debug 빌드에서만 날짜를 바꿔 확인할 수 있습니다. 먼저 학습 기능의 상황 퍼즐을 완료한 뒤 앱을 다시 실행합니다.
+
+```bash
+adb shell am start -n com.letsgo.chageun/.MainActivity --ei dayOffset 1
+```
+
+홈의 복습 배너를 눌러 다른 상황의 복습을 진행합니다. `dayOffset`은 시연용이며 Release APK에서는 사용할 수 없습니다.
 
 ## 음성 및 자격 증명
 
