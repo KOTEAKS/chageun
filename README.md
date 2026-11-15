@@ -43,7 +43,7 @@ adb shell am start -n com.letsgo.chageun/.MainActivity
 
 제출용 APK는 서명된 `release` 빌드입니다. 빌드 출력은 `app/build/outputs/apk/release/app-release.apk`이며, 제출용 파일은 `apk/김택수_차근차근_release.apk`에 있습니다.
 
-Release APK에는 Pleos TTS Client ID와 Client Secret을 넣지 않습니다. 자막은 계속 표시되며, 음성은 기기 TTS 지원 상태에 따라 달라질 수 있습니다. 공개 저장소에는 `local.properties`, `signing.properties`, `signing/`을 올리지 않습니다. `signing.properties`는 각 빌드 담당자가 관리하는 키스토어 경로·별칭·비밀번호 설정 파일입니다.
+제출용 Release APK는 Client ID와 Client Secret 없이 실행할 수 있습니다. 안내 자막은 항상 표시됩니다. TTS SDK는 HYBRID 모드이며, Pleos 안내에 따르면 네트워크 연결이 끊기면 기기 음성 엔진으로 전환합니다. 음성은 서버 연결과 기기 TTS 지원 상태에 따라 달라집니다. 공개 저장소에는 `local.properties`, `signing.properties`, `signing/`을 올리지 않습니다. `signing.properties`는 각 빌드 담당자가 관리하는 키스토어 경로·별칭·비밀번호 설정 파일입니다.
 
 Release 빌드에는 개인 키스토어와 프로젝트 루트의 `signing.properties`가 필요합니다. 키스토어는 한 번 생성해 안전하게 보관하고, 같은 앱의 이후 APK에도 같은 키를 사용합니다.
 
@@ -65,7 +65,7 @@ python3 -I tools/vc_scenario.py demo
 
 ## 음성 및 자격 증명
 
-디버그 빌드에서 Pleos TTS 서버 음성을 연결하려면 Pleos 개발자 콘솔에서 발급한 값을 프로젝트 루트의 `local.properties`에 둡니다. 이 파일은 Git에서 제외되며, 해당 값은 디버그 빌드에만 전달됩니다. Release APK에서는 두 값이 비어 있고, 화면 자막은 계속 사용할 수 있습니다.
+Pleos TTS 서버 음성으로 개발·시험하려면 [Pleos Playground 개발자 안내](https://document.pleos.ai/docs/pleos-only/create-my-project)에 따라 계정을 만들고 `Workspace > My Project`에서 프로젝트를 생성합니다. 프로젝트 정보의 `SDK > Client ID`와 `Client Secret`을 로컬 `local.properties`에만 기록합니다. 이것은 심사용 APK 실행에 필요한 값이 아닙니다. `Project ID (Key)`는 Client ID·Secret과 별도 값입니다. 문서에서 TextToSpeech SDK가 `준비 중`으로 표시되면 사용 신청이 열리지 않을 수 있으니 프로젝트 화면에서 상태를 확인하세요. 발급한 비밀값은 소스·이슈·커밋·APK에 넣지 마세요.
 
 ```properties
 pleos.clientId=...
