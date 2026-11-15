@@ -20,7 +20,8 @@
 - 단위 테스트: 2026-11-15 기준 121개 통과. 같은 날 서명된 Release APK를 빌드하고 서명을 확인했으며, Pleos Connect Emulator 2.1.0에 설치해 첫 화면 실행을 확인했습니다. 전체 화면 흐름과 실차 동작은 확인되지 않았습니다.
 - 실차 동작은 확인되지 않았습니다.
 - 공개 저장소: https://github.com/KOTEAKS/chageun
-- 제출용 서명 APK: https://github.com/KOTEAKS/chageun/releases/tag/v0.1.0
+- 제출용 서명 APK: `apk/김택수_차근차근_release.apk` (저장소 내 경로)
+- GitHub Release 페이지: https://github.com/KOTEAKS/chageun/releases/tag/v0.1.0
 
 ## 빌드 및 테스트
 
@@ -41,7 +42,7 @@ adb shell am start -n com.letsgo.chageun/.MainActivity
 
 ## 제출용 Release APK
 
-제출용 APK는 서명된 `release` 빌드입니다. 출력 경로는 `app/build/outputs/apk/release/app-release.apk`; 공개 배포 파일명은 `chageun_release.apk`입니다. [GitHub Release v0.1.0](https://github.com/KOTEAKS/chageun/releases/tag/v0.1.0)에서 내려받을 수 있습니다.
+제출용 APK는 서명된 `release` 빌드입니다. 빌드 출력은 `app/build/outputs/apk/release/app-release.apk`이며, 제출용 파일은 `apk/김택수_차근차근_release.apk`에 있습니다. [GitHub Release v0.1.0](https://github.com/KOTEAKS/chageun/releases/tag/v0.1.0)에도 다운로드 파일을 제공합니다.
 
 Release APK에는 Pleos TTS Client ID와 Client Secret을 넣지 않습니다. 자막은 계속 표시되며, 음성은 기기 TTS 지원 상태에 따라 달라질 수 있습니다. 공개 저장소에는 `local.properties`, `signing.properties`, `signing/`을 올리지 않습니다. `signing.properties`는 각 빌드 담당자가 관리하는 키스토어 경로·별칭·비밀번호 설정 파일입니다.
 
